@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\ItemRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\Entity(repositoryClass: ItemRepository::class)]
 class Item
@@ -11,16 +12,19 @@ class Item
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['shopping_list:read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 128, options: ["default" => "Unnamed Item"])]
-    private ?string $name = "Unnamed Item";
+    #[Groups(['shopping_list:read'])]
+    private ?string $name = null;
 
     #[ORM\ManyToOne(inversedBy: 'items')]
     #[ORM\JoinColumn(nullable: false)]
     private ?ShoppingList $shopping_list = null;
 
     #[ORM\Column(options: ["default" => false])]
+    #[Groups(['shopping_list:read'])]
     private ?bool $acquired = false;
 
     public function getId(): ?int

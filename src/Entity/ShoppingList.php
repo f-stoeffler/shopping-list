@@ -6,6 +6,7 @@ use App\Repository\ShoppingListRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\Entity(repositoryClass: ShoppingListRepository::class)]
 class ShoppingList
@@ -13,15 +14,18 @@ class ShoppingList
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['shopping_list:read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 32, options: ["default" => "Unnamed List"])]
-    private ?string $name = "Unnamed List";
+    #[Groups(['shopping_list:read'])]
+    private ?string $name = null;
 
     /**
      * @var Collection<int, Item>
      */
     #[ORM\OneToMany(targetEntity: Item::class, mappedBy: 'shopping_list', orphanRemoval: true)]
+    #[Groups(['shopping_list:read'])]
     private Collection $items;
 
     public function __construct()
