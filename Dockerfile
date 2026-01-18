@@ -11,6 +11,9 @@ RUN apt-get update && apt-get install -y \
     libxml2-dev \
     zip \
     unzip \
+    icu-uc \
+    icu-io\
+    icu-i18n \
     libzip-dev \
     libpq-dev \
     default-mysql-client \
