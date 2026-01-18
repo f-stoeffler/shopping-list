@@ -1,8 +1,8 @@
 # docker-compose.yml
 version: '3.8'
 
-services:services:
-    db:
+services:
+    database:
         image: mysql:8.0
         environment:
             - MYSQL_ROOT_PASSWORD=28ERTWTE45hn2wMIZUOPBRN86zqxdp9804
