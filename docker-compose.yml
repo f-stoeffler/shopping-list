@@ -7,16 +7,15 @@ services:
     container_name: symfony_app
     restart: unless-stopped
     ports:
-      - "80:80"
-      - "443:443" # Optional: for HTTPS
+      - "8080:80"  # Changed from 80:80 to avoid conflict
     environment:
       APP_ENV: ${APP_ENV:-prod}
-      APP_SECRET: ${APP_SECRET}
+      APP_SECRET: ${APP_SECRET:-default_secret_change_me}
       DATABASE_URL: mysql://${MYSQL_USER}:${MYSQL_PASSWORD}@database:3306/${MYSQL_DATABASE}?serverVersion=8.0&charset=utf8mb4
     volumes:
       - ./public:/var/www/html/public
       - ./var:/var/www/html/var
-      # For development, you might want to mount the entire project:
+      # For development, mount the entire codebase:
       # - .:/var/www/html
     depends_on:
       database:
@@ -37,29 +36,11 @@ services:
       - "3306:3306"
     volumes:
       - mysql_data:/var/lib/mysql
-      - ./docker/mysql/my.cnf:/etc/mysql/conf.d/my.cnf # Optional: custom config
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u${MYSQL_USER}", "-p${MYSQL_PASSWORD}"]
-      timeout: 20s
-      retries: 10
-      start_period: 40s
-    networks:
-      - symfony-network
-
-  # Optional: Nginx as reverse proxy (better for production)
-  nginx:
-    image: nginx:alpine
-    container_name: nginx_proxy
-    restart: unless-stopped
-    ports:
-      - "80:80"
-      - "443:443"
-    volumes:
-      - ./docker/nginx/conf.d:/etc/nginx/conf.d
-      - ./public:/var/www/html/public
-      - ./docker/nginx/ssl:/etc/nginx/ssl # For SSL certificates
-    depends_on:
-      - app
+      interval: 10s
+      timeout: 5s
+      retries: 5
     networks:
       - symfony-network
 
