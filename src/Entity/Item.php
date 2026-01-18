@@ -12,19 +12,20 @@ class Item
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['shopping_list:read'])]
+    #[Groups(['shopping-list', 'item'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 128, options: ["default" => "Unnamed Item"])]
-    #[Groups(['shopping_list:read'])]
+    #[Groups(['shopping-list', 'item'])]
     private ?string $name = null;
 
-    #[ORM\ManyToOne(inversedBy: 'items')]
+    #[ORM\ManyToOne(inversedBy: 'items', cascade: ['persist'])]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['item'])]
     private ?ShoppingList $shopping_list = null;
 
     #[ORM\Column(options: ["default" => false])]
-    #[Groups(['shopping_list:read'])]
+    #[Groups(['shopping-list', 'item'])]
     private ?bool $acquired = false;
 
     public function getId(): ?int

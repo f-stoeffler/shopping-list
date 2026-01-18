@@ -14,6 +14,7 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/item')]
 final class ItemController extends AbstractController
 {
+/*
     #[Route(name: 'app_item_index', methods: ['GET'])]
     public function index(ItemRepository $itemRepository): Response
     {
@@ -41,7 +42,6 @@ final class ItemController extends AbstractController
             'form' => $form,
         ]);
     }
-
     #[Route('/{id}', name: 'app_item_show', methods: ['GET'])]
     public function show(Item $item): Response
     {
@@ -49,7 +49,7 @@ final class ItemController extends AbstractController
             'item' => $item,
         ]);
     }
-
+*/
     #[Route('/{id}/edit', name: 'app_item_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Item $item, EntityManagerInterface $entityManager): Response
     {

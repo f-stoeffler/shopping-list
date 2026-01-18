@@ -3,24 +3,42 @@
 {% block title %}ShoppingList{% endblock %}
 
 {% block body %}
-    <h1>{{ shopping_list.name }}</h1>
+<h1 class="mb-3 mt-2">Shopping List</h1>
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ shopping_list.id }}</td>
-            </tr>
-            <tr>
-                <th>Name</th>
-                <td>{{ shopping_list.name }}</td>
-            </tr>
-        </tbody>
-    </table>
+<div class="card p-0 mb-4">
+    <h5 class="card-header">{{ shopping_list.name }}</h5>
+    <div class="card-body">
+        <div class="card mb-2">
+            <ul class="list-group list-group-flush">
+                {% for item in shopping_list.items %}
+                <li class="list-group-item d-flex">
+                    <div
+                        class="align-self-center {% if item.acquired %}text-decoration-line-through text-muted{% endif %}">
+                        {{ item.name }}
+                    </div>
+                    <div class="ms-auto">
+                        <a class="btn btn-outline-primary" href="{{ path('app_item_edit', {'id': item.id}) }}">Edit</a>
+                        {{ include('item/_delete_form.html.twig') }}
+                    </div>
+                </li>
+                {% else %}
+                <li class="list-group-item list-group-item-light text-muted">No records found</li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="d-flex gap-1">
+            <a class="btn btn-outline-primary" href="{{
+                                path('app_shopping_list_item_new', {
+                                    id: shopping_list.id
+                                })
+                            }}">Add Item</a>
+            <a class="btn btn-outline-primary"
+                href="{{path('app_shopping_list_edit', {id: shopping_list.id }) }}">Edit</a>
+            {{ include('shopping_list/_delete_form.html.twig') }}
+            <div class="ms-auto align-self-end text-muted fs-6">ID: {{ shopping_list.id }}</div>
+        </div>
+    </div>
+</div>
 
-    <a href="{{ path('app_shopping_list_index') }}">back to list</a>
-
-    <a href="{{ path('app_shopping_list_edit', {'id': shopping_list.id}) }}">edit</a>
-
-    {{ include('shopping_list/_delete_form.html.twig') }}
+<a class="btn btn-outline-secondary" href="{{ path('app_shopping_list_index') }}">Back to Shopping Lists</a>
 {% endblock %}

@@ -14,18 +14,18 @@ class ShoppingList
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['shopping_list:read'])]
+    #[Groups(['shopping-list', 'item'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 32, options: ["default" => "Unnamed List"])]
-    #[Groups(['shopping_list:read'])]
+    #[Groups(['shopping-list', 'item'])]
     private ?string $name = null;
 
     /**
      * @var Collection<int, Item>
      */
-    #[ORM\OneToMany(targetEntity: Item::class, mappedBy: 'shopping_list', orphanRemoval: true)]
-    #[Groups(['shopping_list:read'])]
+    #[ORM\OneToMany(targetEntity: Item::class, mappedBy: 'shopping_list', orphanRemoval: true, cascade: ['persist'])]
+    #[Groups(['shopping-list'])]
     private Collection $items;
 
     public function __construct()

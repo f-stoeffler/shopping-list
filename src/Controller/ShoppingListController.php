@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-#[Route('/shopping-list')]
+#[Route('/lists')]
 final class ShoppingListController extends AbstractController
 {
     #[Route(name: 'app_shopping_list_index', methods: ['GET'])]
