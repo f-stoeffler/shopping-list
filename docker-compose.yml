@@ -1,48 +1,40 @@
 # docker-compose.yml
 version: '3.8'
 
-services:
-  app:
-    build: .
-    container_name: symfony_app
-    restart: unless-stopped
-    ports:
-      - "8080:80"  # Changed from 80:80 to avoid conflict
-    environment:
-      APP_ENV: ${APP_ENV:-prod}
-      APP_SECRET: ${APP_SECRET:-default_secret_change_me}
-      DATABASE_URL: mysql://${MYSQL_USER}:${MYSQL_PASSWORD}@database:3306/${MYSQL_DATABASE}?serverVersion=8.0&charset=utf8mb4
-    volumes:
-      - ./public:/var/www/html/public
-      - ./var:/var/www/html/var
-      # For development, mount the entire codebase:
-      # - .:/var/www/html
-    depends_on:
-      database:
-        condition: service_healthy
-    networks:
-      - symfony-network
+services:services:
+    db:
+        image: mysql:8.0
+        environment:
+            - MYSQL_ROOT_PASSWORD=28ERTWTE45hn2wMIZUOPBRN86zqxdp9804
+            - MYSQL_PASSWORD=£P9t4?EEhA5<W!OQKt50%H8
+            - MYSQL_DATABASE=shopping_list_prod
+            - MYSQL_USER=user
+    web:
+        build: .
+        ports:
+            - 8080:80
 
-  database:
-    image: mysql:8.0
-    container_name: mysql_db
-    restart: unless-stopped
-    environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root}
-      MYSQL_DATABASE: ${MYSQL_DATABASE:-shopping_list_db}
-      MYSQL_USER: ${MYSQL_USER:-user}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-password}
-    ports:
-      - "3306:3306"
-    volumes:
-      - mysql_data:/var/lib/mysql
-    healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u${MYSQL_USER}", "-p${MYSQL_PASSWORD}"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-    networks:
-      - symfony-network
+  # database:
+  #   image: mysql:8.0
+  #   container_name: mysql_db
+  #   restart: unless-stopped
+  #   environment:
+  #     MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root}
+  #     MYSQL_DATABASE: ${MYSQL_DATABASE:-shopping_list_db}
+  #     MYSQL_USER: ${MYSQL_USER:-user}
+  #     MYSQL_PASSWORD: ${MYSQL_PASSWORD:-password}
+  #   ports:
+  #     - "3306:3306"
+  #   volumes:
+  #     - mysql_data:/var/lib/mysql
+  #     - ./docker/mysql/my.cnf:/etc/mysql/conf.d/my.cnf # Optional: custom config
+  #   healthcheck:
+  #     test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u${MYSQL_USER}", "-p${MYSQL_PASSWORD}"]
+  #     timeout: 20s
+  #     retries: 10
+  #     start_period: 40s
+  #   networks:
+  #     - symfony-network
 
 volumes:
   mysql_data:
