@@ -12,6 +12,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 #[Route('/lists')]
 final class ShoppingListController extends AbstractController
@@ -34,6 +36,11 @@ final class ShoppingListController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->persist($shoppingList);
             $entityManager->flush();
+            
+        $this->addFlash(
+            'primary',
+            'Shopping list added!'
+        );
 
             return $this->redirectToRoute('app_shopping_list_index', [], Response::HTTP_SEE_OTHER);
         }
@@ -44,7 +51,7 @@ final class ShoppingListController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_shopping_list_show', methods: ['GET'])]
+    #[Route('/{id}/items', name: 'app_shopping_list_items_edit', methods: ['GET'])]
     public function show(ShoppingList $shoppingList): Response
     {
         return $this->render('shopping_list/show.html.twig', [
@@ -60,6 +67,11 @@ final class ShoppingListController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
+
+            $this->addFlash(
+                'primary',
+                'Shopping list updated!'
+            );
 
             return $this->redirectToRoute('app_shopping_list_index', [], Response::HTTP_SEE_OTHER);
         }
@@ -77,31 +89,45 @@ final class ShoppingListController extends AbstractController
             $entityManager->remove($shoppingList);
             $entityManager->flush();
         }
+        $this->addFlash(
+            'primary',
+            'Shopping List removed!'
+        );
 
         return $this->redirectToRoute('app_shopping_list_index', [], Response::HTTP_SEE_OTHER);
     }
 
 
 
-    #[Route('/{id}/new-item', name: 'app_shopping_list_item_new', methods: ['GET', 'POST'])]
-    public function new_item(Request $request, EntityManagerInterface $entityManager, ShoppingList $shoppingList): Response
+    #[Route('/{id}/new-item', name: 'app_shopping_list_item_new', methods: ['POST'])]
+    public function new_item(Request $request, ValidatorInterface $validator, EntityManagerInterface $em, ShoppingList $shoppingList): Response
     {
         $item = new Item();
+        $itemName = $request->getPayload()->getString('name');
+        $item->setName($itemName);
         $item->setShoppingList($shoppingList);
-        $form = $this->createForm(ItemType::class, $item);
-        $form->handleRequest($request);
+        $errors = $validator->validate($item);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($item);
-            $entityManager->flush();
+        if (count($errors) > 0) {
+            foreach ($errors as $error) {
+                $this->addFlash(
+                    'danger',
+                    $error->getMessage()
+                );
+            }
 
-            return $this->redirectToRoute('app_shopping_list_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_shopping_list_items_edit', ['id' => $shoppingList->getId()], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->render('item/new.html.twig', [
-            'item' => $item,
-            'form' => $form,
-        ]);
+        $em->persist($item);
+        $em->flush();
+
+        $this->addFlash(
+            'primary',
+            'Item added!'
+        );
+
+        return $this->redirectToRoute('app_shopping_list_items_edit', ['id' => $shoppingList->getId()], Response::HTTP_SEE_OTHER);
     }
 
     #[Route('/{id}/delete-item', name: 'app_shopping_list_item_delete', methods: ['POST'])]

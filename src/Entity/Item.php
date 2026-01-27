@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\ItemRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Attribute\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ItemRepository::class)]
 class Item
@@ -17,6 +18,7 @@ class Item
 
     #[ORM\Column(length: 128, options: ["default" => "Unnamed Item"])]
     #[Groups(['shopping-list', 'item'])]
+    #[Assert\NotBlank]
     private ?string $name = null;
 
     #[ORM\ManyToOne(inversedBy: 'items', cascade: ['persist'])]

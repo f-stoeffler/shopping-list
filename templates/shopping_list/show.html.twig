@@ -11,12 +11,15 @@
         <div class="card mb-2">
             <ul class="list-group list-group-flush">
                 {% for item in shopping_list.items %}
-                <li class="list-group-item d-flex">
-                    <div
-                        class="align-self-center {% if item.acquired %}text-decoration-line-through text-muted{% endif %}">
-                        {{ item.name }}
-                    </div>
-                    <div class="ms-auto">
+                <li class="list-group-item d-flex list-group-item-action p-0">
+                    <form method="post" action="{{ path('app_item_toggle_acquired', {'id': item.id}) }}"
+                        class="p-0 d-flex flex-fill">
+                        <button type="submit"
+                            class="align-self-center text-start btn p-3 flex-fill {% if item.acquired %}text-decoration-line-through text-muted{% endif %}">
+                            {{ item.name }}
+                        </button>
+                    </form>
+                    <div class="align-self-center ms-auto pe-3 py-2">
                         <a class="btn btn-outline-primary" href="{{ path('app_item_edit', {'id': item.id}) }}">Edit</a>
                         {{ include('item/_delete_form.html.twig') }}
                     </div>
@@ -24,16 +27,19 @@
                 {% else %}
                 <li class="list-group-item list-group-item-light text-muted">No records found</li>
                 {% endfor %}
+                <li class="list-group-item list-group-item-action">
+                    <form method="post" action="{{ path('app_shopping_list_item_new', {'id': shopping_list.id}) }}"
+                        class=" align-self-center input-group my-1">
+                        <input type="text" class="form-control" placeholder="Item name" aria-label="Item name"
+                            aria-describedby="add-item-btn" name="name">
+                        <button class="btn btn-primary" id="add-item-btn" type="submit">Add Item</button>
+                    </form>
+                </li>
             </ul>
         </div>
         <div class="d-flex gap-1">
-            <a class="btn btn-outline-primary" href="{{
-                                path('app_shopping_list_item_new', {
-                                    id: shopping_list.id
-                                })
-                            }}">Add Item</a>
             <a class="btn btn-outline-primary"
-                href="{{path('app_shopping_list_edit', {id: shopping_list.id }) }}">Edit</a>
+                href="{{path('app_shopping_list_edit', {id: shopping_list.id }) }}">Change name</a>
             {{ include('shopping_list/_delete_form.html.twig') }}
             <div class="ms-auto align-self-end text-muted fs-6">ID: {{ shopping_list.id }}</div>
         </div>
