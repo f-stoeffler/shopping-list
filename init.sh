@@ -18,7 +18,7 @@ docker compose exec php composer require webapp --no-interaction
 fi
 
 echo "📚 Installing dependencies…"
-docker compose exec git config --global --add safe.directory /var/www/html
+docker compose exec php git config --global --add safe.directory /var/www/html
 docker compose exec php composer install
 
 echo "🗄️ Setting up database…"
