@@ -6,9 +6,6 @@ RUN groupadd -g 1001 appgroup && \
 # Set working directory
 WORKDIR /var/www/html
 
-COPY composer.json ./
-COPY composer.lock ./
-
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
     curl \
@@ -34,30 +31,27 @@ RUN docker-php-ext-install \
     zip \
     intl
 
-ENV APP_ENV=prod
-ENV APP_DEBUG=0
-
 # Install Composer
-RUN wget https://getcomposer.org/download/2.9.4/composer.phar \
-    && mv composer.phar /usr/bin/composer && chmod +x /usr/bin/composer
-RUN composer install --no-dev --no-scripts --no-autoloader --no-interaction
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-COPY . .
-
-RUN composer dump-autoload --optimize
 # Copy PHP config
 COPY docker/php/php.ini /usr/local/etc/php/php.ini
 
-# Set permissions
-RUN chown -R appuser:appgroup /var/www/html
+# Copy application files (everything)
+COPY --chown=appuser:appgroup . .
 
-# Use non-root user
+# Switch to appuser for composer operations
 USER appuser
+
+# Set environment
+ENV APP_ENV=prod
+ENV APP_DEBUG=0
+
+# Install dependencies as appuser
+RUN composer install --no-dev --optimize-autoloader --no-interaction --no-progress
 
 # Expose port
 EXPOSE 9000
-ENV PORT=9000
 
 # Default command
 CMD ["php-fpm"]

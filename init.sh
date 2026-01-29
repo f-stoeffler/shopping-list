@@ -3,25 +3,25 @@
 echo "🚀 Initializing Symfony project with Docker…"
 
 echo "📦 Building Docker images…"
-docker compose build
+docker compose down  # Clean up any existing containers
+docker compose build --no-cache  # Force fresh build
 
 echo "🔄 Starting containers…"
 docker compose --env-file .env.prod up -d
 
-echo "⏳ Waiting for services…"
-sleep 10
+echo "⏳ Waiting for services to be ready…"
+sleep 15
 
-if [ ! -f "composer.json" ]; then
-echo "🎵 Installing Symfony…"
-docker exec symfony_php composer create-project symfony/skeleton . --no-interaction
-docker exec symfony_php composer require webapp --no-interaction
-fi
+echo "✅ Containers are running!"
+echo "📊 Checking services:"
+docker compose ps
 
-docker exec symfony_php composer install --no-dev --optimize-autoloader --no-interaction
+# Note: Composer install is already done in Dockerfile
+# No need to run it again in init.sh
+
 echo "🗄️ Setting up database…"
-docker exec symfony_php php bin/console doctrine:database:create --if-not-exists
+docker exec symfony_php php bin/console doctrine:database:create --if-not-exists --no-interaction
 docker exec symfony_php php bin/console doctrine:migrations:migrate --no-interaction
 
-echo "✅ Project initialized successfully!"
-echo "🌐 App available at: http://localhost:8080"
-echo "🗄️ phpMyAdmin available at: http://localhost:8081"
+echo "🎉 Setup complete!"
+echo "🌐 Your application should be available at http://localhost:8000"
