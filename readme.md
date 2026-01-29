@@ -6,7 +6,7 @@ To run this project you will need:
 - Composer
 - Docker (For the database)
 
-After cloning the project run ``composer install`` in the project directory. To create the database run ``docker-composer up -d``. This should create a docker container which contains the database. If the database was not already created, run ``php bin/console doctrine:database:create``. To create the tables necessary for this app, run ``php bin/console doctrine:migrations:migrate``. Finally run ``symfony server:start`` to start the server.
+After cloning the project run ``composer install`` in the project directory. To create the database run ``docker-compose -f .\docker-compose-db.yml up -d``. This should create a docker container which contains the database. If the database was not already created, run ``php bin/console doctrine:database:create``. To create the tables necessary for this app, run ``php bin/console doctrine:migrations:migrate``. Finally run ``symfony server:start`` to start the server.
 
 These are the API endpoints available together with examples of the data structure for POST/PUT and responses for GET:
 - POST ``/api/lists`` - Create a shopping list with or without items, responds with complete shopping list, responds with the new list
