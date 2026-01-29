@@ -12,6 +12,7 @@ COPY composer.lock ./
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
+    curl \
     wget \
     git \
     libpng-dev \
@@ -37,7 +38,7 @@ RUN docker-php-ext-install \
 # Install Composer
 RUN wget https://getcomposer.org/download/2.0.9/composer.phar \
     && mv composer.phar /usr/bin/composer && chmod +x /usr/bin/composer
-RUN composer install --no-dev
+RUN composer install --no-dev --optimize-autoloader --no-interaction;
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 
