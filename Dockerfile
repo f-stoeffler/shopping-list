@@ -7,6 +7,7 @@ RUN groupadd -g 1001 appgroup && \
 WORKDIR /var/www/html
 
 COPY composer.json ./
+COPY composer.lock ./
 
 
 # Install system dependencies
