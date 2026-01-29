@@ -38,9 +38,12 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 COPY docker/php/php.ini /usr/local/etc/php/php.ini
 
 # Copy application files (everything)
-COPY --chown=appuser:appgroup . .
+COPY . .
 
-RUN chown -R appuser:appgroup /var/www/html
+# Set directory to be writable by both appuser and root (group)
+RUN chown -R appuser:appgroup /var/www/html && \
+    chmod -R 775 /var/www/html && \
+    chmod -R g+s /var/www/html  
 
 # Switch to appuser for composer operations
 USER appuser
