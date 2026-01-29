@@ -1,7 +1,7 @@
 FROM php:8.5-fpm
 
-RUN addgroup -g 1001 -S appgroup && \
-    adduser -S appuser -u 1001 -G appgroup
+RUN groupadd -g 1001 appgroup && \
+    useradd -u 1001 -g appgroup -m appuser
 
 # Set working directory
 WORKDIR /var/www/html
