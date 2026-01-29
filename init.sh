@@ -13,13 +13,14 @@ sleep 10
 
 if [ ! -f "composer.json" ]; then
 echo "🎵 Installing Symfony…"
-docker compose exec php composer create-project symfony/skeleton . --no-interaction
-docker compose exec php composer require webapp --no-interaction
+docker exec symfony_php composer create-project symfony/skeleton . --no-interaction
+docker exec symfony_php composer require webapp --no-interaction
 fi
 
+docker exec symfony_php composer install --no-dev --optimize-autoloader --no-interaction
 echo "🗄️ Setting up database…"
-docker exec php php bin/console doctrine:database:create --if-not-exists
-docker exec php php bin/console doctrine:migrations:migrate --no-interaction
+docker exec symfony_php php bin/console doctrine:database:create --if-not-exists
+docker exec symfony_php php bin/console doctrine:migrations:migrate --no-interaction
 
 echo "✅ Project initialized successfully!"
 echo "🌐 App available at: http://localhost:8080"
