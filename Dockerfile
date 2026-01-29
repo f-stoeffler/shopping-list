@@ -55,8 +55,7 @@ USER appuser
 
 # Expose port
 EXPOSE 9000
-EXPOSE 6767
-EXPOSE 6768
+ENV PORT=9000
 
 # Default command
 CMD ["php-fpm"]
