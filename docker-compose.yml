@@ -3,7 +3,7 @@ version: '3.8'
 services:
   # PHP-FPM Service
   php:
-    build:
+    build: "shopping_list"
     env_file:
       - .env.prod
     context: .
@@ -35,10 +35,10 @@ services:
     image: mysql:8.0
     container_name: symfony_mysql
     environment:
-    MYSQL_ROOT_PASSWORD: root
-    MYSQL_DATABASE: symfony_db
-    MYSQL_USER: symfony
-    MYSQL_PASSWORD: symfony
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-symfony_app}
+      MYSQL_USER: ${MYSQL_USER:-app_user}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-app_password}
     ports:
       - “3306:3306”
     volumes:
