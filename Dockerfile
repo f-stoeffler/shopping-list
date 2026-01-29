@@ -34,6 +34,9 @@ RUN docker-php-ext-install \
     zip \
     intl
 
+ENV APP_ENV=prod
+ENV APP_DEBUG=0
+
 # Install Composer
 RUN wget https://getcomposer.org/download/2.9.4/composer.phar \
     && mv composer.phar /usr/bin/composer && chmod +x /usr/bin/composer
