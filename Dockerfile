@@ -8,6 +8,7 @@ WORKDIR /var/www/html
 
 COPY composer.json ./
 COPY composer.lock ./
+COPY ./bin/ ./
 
 
 # Install system dependencies

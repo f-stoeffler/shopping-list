@@ -13,7 +13,7 @@ sleep 10
 
 if [ ! -f "composer.json" ]; then
 echo "🎵 Installing Symfony…"
-docker compose exec php composer create-project symfony . --no-interaction
+docker compose exec php composer create-project symfony/skeleton . --no-interaction
 docker compose exec php composer require webapp --no-interaction
 fi
 
