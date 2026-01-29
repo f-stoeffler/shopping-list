@@ -15,6 +15,7 @@ if [ ! -f "composer.json" ]; then
 echo "🎵 Installing Symfony…"
 docker compose exec php composer create-project symfony/skeleton . --no-interaction
 docker compose exec php composer require webapp --no-interaction
+docker compose exec php composer sync-recipes -v --force
 fi
 
 echo "📚 Installing dependencies…"

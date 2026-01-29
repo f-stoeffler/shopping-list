@@ -38,7 +38,6 @@ RUN docker-php-ext-install \
 # Install Composer
 RUN wget https://getcomposer.org/download/2.9.4/composer.phar \
     && mv composer.phar /usr/bin/composer && chmod +x /usr/bin/composer
-RUN composer sync-recipes -v --force
 RUN composer install --no-dev --optimize-autoloader --no-interaction
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
