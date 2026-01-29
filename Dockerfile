@@ -11,8 +11,8 @@ COPY composer.json ./
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
+    wget \
     git \
-    curl \
     libpng-dev \
     libonig-dev \
     libxml2-dev \
