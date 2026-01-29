@@ -40,6 +40,8 @@ COPY docker/php/php.ini /usr/local/etc/php/php.ini
 # Copy application files (everything)
 COPY --chown=appuser:appgroup . .
 
+RUN chown -R appuser:appgroup /var/www/html
+
 # Switch to appuser for composer operations
 USER appuser
 
