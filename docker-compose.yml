@@ -10,11 +10,11 @@ services:
     dockerfile: Dockerfile
     container_name: symfony_php
     volumes:
-    - .:/var/www/html
+      - .:/var/www/html
     networks:
-    - symfony_network
+      - symfony_network
     depends_on:
-    - database
+      - database
 
     # Nginx Service
   nginx:
@@ -64,7 +64,7 @@ services:
 
 networks:
   symfony_network:
-  driver: bridge
+    driver: bridge
 
 volumes:
   mysql_data:
