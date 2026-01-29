@@ -1,8 +1,13 @@
 FROM php:8.5-fpm
 
-# Build arguments
-ARG USER_ID=1000
-ARG GROUP_ID=1000
+RUN addgroup -g 1001 -S appgroup && \
+    adduser -S appuser -u 1001 -G appgroup
+
+# Set working directory
+WORKDIR /var/www/html
+
+COPY composer.json ./
+
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
@@ -29,14 +34,9 @@ RUN docker-php-ext-install \
     intl
 
 # Install Composer
+RUN composer install --no-dev
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# Create user with same UID/GID as host
-RUN groupadd -g ${GROUP_ID} appgroup && \
-useradd -u ${USER_ID} -g appgroup -m appuser
-
-# Set working directory
-WORKDIR /var/www/html
 
 # Copy PHP config
 COPY docker/php/php.ini /usr/local/etc/php/php.ini
