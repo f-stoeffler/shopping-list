@@ -19,6 +19,12 @@ docker compose ps
 # Note: Composer install is already done in Dockerfile
 # No need to run it again in init.sh
 
+docker exec symfony_php chown -R www-data:www-data /var/www/html/var
+docker exec symfony_php chmod -R 775 /var/www/html/var
+docker exec symfony_php chmod -R 777 /tmp
+docker exec symfony_php php bin/console cache:warmup --env=prod
+
+
 echo "🗄️ Setting up database…"
 docker exec symfony_php php bin/console doctrine:database:create --if-not-exists --no-interaction
 docker exec symfony_php php bin/console doctrine:migrations:migrate --no-interaction

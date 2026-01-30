@@ -46,7 +46,6 @@ RUN chown -R appuser:appgroup /var/www/html && \
     chmod -R g+s /var/www/html  
 
 # Switch to appuser for composer operations
-USER appuser
 
 # Set environment
 ENV APP_ENV=prod
