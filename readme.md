@@ -6,10 +6,10 @@ To run this project you will need:
 - Composer
 - Docker (For the database)
 
-After cloning the project run ``composer install`` in the project directory. To create the database run ``docker-compose -f .\dev-docker-compose.yml up -d``. This should create a docker container which contains the database (If you have previously docker-composed the database with different credentials, you may need to clean your docker images and/or volumes). If the database was not created with docker-compose, run ``php bin/console doctrine:database:create``. To create the tables necessary for this app, run ``php bin/console doctrine:migrations:migrate``. Finally, run ``symfony server:start`` to start the server.
+For development: After cloning the project run ``composer install`` in the project directory. To create the database run ``docker-compose -f .\dev-docker-compose.yml up -d``. This should create a docker container which contains the database (If you have previously docker-composed the database with different mysql credentials, you may need to clean your docker images and/or volumes). If the database was not created with docker-compose, run ``php bin/console doctrine:database:create``. To create the tables necessary for this app, run ``php bin/console doctrine:migrations:migrate``. Finally, run ``symfony server:start`` to start the development server.
 
 These are the API endpoints available together with examples of the data structure for POST/PUT and responses for GET:
-- POST ``/api/lists`` - Create a shopping list with or without items, responds with complete shopping list, responds with the new list
+- POST ``/api/lists`` - Create a shopping list with or without items, responds with newly created shopping list
   - ``{"name": "Posted List", "items": [{"name": "Included Item", acquired: true}]}``
 - POST ``/api/lists/{id}/item`` - Create an item in the shopping list that has the ID {id}, responds with complete shopping list
   - ``{"name": "Posted Item", "acquired": true}``
@@ -29,4 +29,4 @@ You can try out these API endpoints at ``https://shopping-list.florian-stoeffler
 
 Disclaimer: I have only tested this on Debian Linux.
 
-To deploy this webapp, rename ``.env.example`` to ``.env.prod`` and replace the placeholder values with secure ones. The app will run at port 9000 (0.0.0.0:9000), to change this, change all mentions of 9000 in ``docker-compose.yml``, ``Dockerfile`` and ``docker/nginx/default.conf`` to your desired port. Finally, run ``bash ./init.sh`` to deploy. Redirect your domain or subdomain to port 9000 or the port that you configured and your webapp should be reachable under https://www.example.com/lists
+To deploy this webapp, rename ``.env.example`` to ``.env.prod`` and replace the placeholder values with secure ones. The app will run at port 9000 (0.0.0.0:9000), to change this, change all mentions of 9000 in ``docker-compose.yml``, ``Dockerfile`` and ``docker/nginx/default.conf`` to your desired port. Finally, run ``bash ./init.sh`` to deploy. Redirect your domain or subdomain to port 9000 or the port that you configured and your webapp should be reachable under https://www.example.com/lists and the API under ``https://www.example.com/api/lists``
