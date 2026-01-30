@@ -27,6 +27,6 @@ You can try out these API endpoints at ``https://shopping-list.florian-stoeffler
 
 # Deploying
 
-Disclaimer: I have only tested this on Ubuntu Linux.
+Disclaimer: I have only tested this on Debian Linux.
 
 To deploy this webapp, rename ``.env.example`` to ``.env.prod`` and replace the placeholder values with secure ones. The app will run at port 9000 (0.0.0.0:9000), to change this, change all mentions of 9000 in ``docker-compose.yml``, ``Dockerfile`` and ``docker/nginx/default.conf`` to your desired port. Finally, run ``bash ./init.sh`` to deploy. Redirect your domain or subdomain to port 9000 or the port that you configured and your webapp should be reachable under https://www.example.com/lists
